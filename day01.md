@@ -41,30 +41,26 @@ Today: Functions and Types
 Functions
 =========
 
-\begin{code}
-square :: Double -> Double
-square x = x*x
-
-plus :: Double -> Double -> Double
-plus x y = x+y
-
-fib :: Integer -> Integer
--- pattern matching
-fib 0 = 0
-fib 1 = 1
-fib n = fib (n-1) + fib (n-1)
-\end{code}
+> square :: Double -> Double
+> square x = x*x
+> 
+> plus :: Double -> Double -> Double
+> plus x y = x+y
+> 
+> fib :: Integer -> Integer
+> -- pattern matching
+> fib 0 = 0
+> fib 1 = 1
+> fib n = fib (n-1) + fib (n-1)
 
 Partial application
 ===================
 
 Trick:
 
-\begin{code}
-add :: Double -> Double -> Double
-add x y = x+y
-addThree = add 3
-\end{code}
+> add :: Double -> Double -> Double
+> add x y = x+y
+> addThree = add 3
 
 ~~~haskell
 addThree 5 -- => 8
@@ -72,22 +68,24 @@ addThree 5 -- => 8
 
 Explanation:
 
+~~~haskell
 add :: Double -> Double -> Double
+~~~
 
 is equivalent to
 
+~~~haskell
 add :: Double -> (Double -> Double)
+~~~
 
 mapping a double to a function of type Double -> Double
 
 Lists
 =====
 
-\begin{code}
-numbers = [1, 2, 3, 4]
--- equivalent to 1:[2, 3, 4]
--- equivalent to 1:2:[3, 4], etc
-\end{code}
+> numbers = [1, 2, 3, 4]
+> -- equivalent to 1:[2, 3, 4]
+> -- equivalent to 1:2:[3, 4], etc
 
 ~~~haskell
 head numbers -- => 1
@@ -105,9 +103,7 @@ zipWith (*) numbers (map (+1) numbers) -- => ?
 Lists of Chars
 ==============
 
-\begin{code}
-string = "Old McDonald had a farm"
-\end{code}
+> string = "Old McDonald had a farm"
 
 ~~~haskell
 words string -- => ["Old", "McDonald", "had",
@@ -128,20 +124,16 @@ numOfWords = length . words -- point-free notation
 Recursion over Lists
 ====================
 
-\begin{code}
-mySum :: [Double] -> Double
--- empty list
-mySum [] = 0
--- non-empty list
-mySum (x:xs) = x + sum xs
-\end{code}
+> mySum :: [Double] -> Double
+> -- empty list
+> mySum [] = 0
+> -- non-empty list
+> mySum (x:xs) = x + sum xs
 
 Something slightly different:
 
-\begin{code}
-myLength [] = 0
-myLength (x:xs) = 1 + myLength xs
-\end{code}
+> myLength [] = 0
+> myLength (x:xs) = 1 + myLength xs
 
 type of myLength?
 
@@ -178,24 +170,20 @@ instead of
 The mighty dot
 ==============
 
-\begin{code}
-(.) :: (b -> c) -> (a -> b) -> (a -> c)
-(.) f g = \x -> f (g x)
-\end{code}
+> (.) :: (b -> c) -> (a -> b) -> (a -> c)
+> (.) f g = \x -> f (g x)
 
 
 Some one liners
 ===============
 
 - Fibonacci numbers
-\begin{code}
-fibs = 0:1:zipWith (+) fibs (tail fibs)
-\end{code}
+
+> fibs = 0:1:zipWith (+) fibs (tail fibs)
 
 - Powers of two
-\begin{code}
-powers = iterate (*2) 1
-\end{code}
+
+> powers = iterate (*2) 1
 
 Last slide
 ==========
