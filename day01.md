@@ -10,14 +10,6 @@ Language
 - Pure: there is no state
 - Strongly typed: each value has a type
 - Algebraic (container) types:
-
-~~~haskell
-data Weekday = Sunday | Monday | Tuesday
-             | Wednesday | Thursday | Friday
-             | Saturday
-data Maybe a = Nothing | Just a
-~~~
-
 - Lazily evaluated (infinitely large data structures)
 - Compiles to native code plus interpreter ala ipython
 - Consequence of purity: easily parallelizeable
@@ -239,7 +231,7 @@ represents, _prepended_ to __x__.
 
 ~~~haskell
 dlist  y   = \x -> y ++ x
-concat a b = \x -> a(b(x))
+concat a b = \x -> a (b x)
 showdl x   = x ""
 
 (j, h) = (dlist "jacke", dlist "hose")
@@ -251,8 +243,8 @@ showdl jhjh -- => "jackehosejackehose"
 ~~~
 associates always to the right!
 
-Types
-=====
+Types: Simple Sum Types
+===================
 
 Simple types
 
@@ -264,7 +256,91 @@ complement C = G
 complement G = C
 complement T = A
 
+myNuc = A
+myAnotherNuc = C
 map complement [A, A, C, G, T, T]
+~~~
+
+Types contd: Sum types
+======================
+
+Two parallel representations of complex numbers
+
+~~~haskell
+data Complex = Cartesian Double Double
+             | Polar     Double Double
+
+z1 :: Complex
+z2 :: Complex
+z1 = Cartesian 1.0  2.0
+z2 = Polar     1.0  pi/2.0
+~~~
+
+both have the same type Complex, we must be able to do arythmetic
+independently on the representation
+
+Types contd: Sum types
+======================
+
+~~~haskell
+data Complex = Cartesian Double Double
+             | Polar     Double Double
+
+add a b = Cartesian (re a + re b) (im a + im b)
+sub a b = Cartesian (re a - re b) (im a - im b)
+mul a b =
+  Polar (abs a)*(abs b) (arg a + arg b)
+div a b =
+  Polar (abs a)/(abs b) (arg a - arg b)
+~~~
+
+Syntactic sugar
+===============
+Haskell supports user-defined _infix_ functions, for example, we can
+define
+
+~~~haskel
+(<+>) = add
+(<->) = sub
+(<*>) = mul
+(</>) = div
+~~~
+
+for fun and profit:
+
+
+~~~haskel
+z = (z1 <+> z2) </> (z1 <-> z2) <*> z1
+~~~
+
+Types contd: Sum types
+======================
+
+Given the following type for complex numbers
+
+~~~haskell
+data Complex = Cartesian Double Double
+             | Polar     Double Double
+~~~
+
+implement __re__, __im__, __abs__, and __arg__
+
+Types contd: Sum types
+======================
+
+~~~haskell
+data Complex = Cartesian Double Double
+             | Polar     Double Double
+
+re (Cartesian x y) = x
+im (Cartesian x y) = y
+re (Polar r theta) = r * cos theta
+im (Polar r theta) = r * sin theta
+
+abs (Cartesian x y) = sqrt (x*x + y*y)
+arg (Cartesian x y) = atan2 y x
+abs (Polar r theta) = r
+arg (Polar r theta) = theta
 ~~~
 
 Container Types: List
@@ -275,7 +351,7 @@ data List a = Nil
             | Cons a (List a)
 ~~~
 
-_type variable_ __a__ parameterizes our list
+_type variable_ __a__ parameterizes our list ( reminder! )
 
 ~~~haskell
 myLength :: List a -> Integer
