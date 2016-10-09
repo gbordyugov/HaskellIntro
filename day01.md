@@ -41,26 +41,30 @@ Today: Functions and Types
 Functions
 =========
 
-> square :: Double -> Double
-> square x = x*x
-> 
-> plus :: Double -> Double -> Double
-> plus x y = x+y
-> 
-> fib :: Integer -> Integer
-> -- pattern matching
-> fib 0 = 0
-> fib 1 = 1
-> fib n = fib (n-1) + fib (n-1)
+~~~haskell
+square :: Double -> Double
+square x = x*x
+
+plus :: Double -> Double -> Double
+plus x y = x+y
+
+fib :: Integer -> Integer
+-- pattern matching
+fib 0 = 0
+fib 1 = 1
+fib n = fib (n-1) + fib (n-1)
+~~~
 
 Partial application
 ===================
 
 Trick:
 
-> add :: Double -> Double -> Double
-> add x y = x+y
-> addThree = add 3
+~~~haskell
+add :: Double -> Double -> Double
+add x y = x+y
+addThree = add 3
+~~~
 
 ~~~haskell
 addThree 5 -- => 8
@@ -83,9 +87,11 @@ mapping a double to a function of type Double -> Double
 Lists
 =====
 
-> numbers = [1, 2, 3, 4]
-> -- equivalent to 1:[2, 3, 4]
-> -- equivalent to 1:2:[3, 4], etc
+~~~haskell
+numbers = [1, 2, 3, 4]
+-- equivalent to 1:[2, 3, 4]
+-- equivalent to 1:2:[3, 4], etc
+~~~
 
 ~~~haskell
 head numbers -- => 1
@@ -103,7 +109,9 @@ zipWith (*) numbers (map (+1) numbers) -- => ?
 Lists of Chars
 ==============
 
-> string = "Old McDonald had a farm"
+~~~haskell
+string = "Old McDonald had a farm"
+~~~
 
 ~~~haskell
 words string -- => ["Old", "McDonald", "had",
@@ -124,16 +132,20 @@ numOfWords = length . words -- point-free notation
 Recursion over Lists
 ====================
 
-> mySum :: [Double] -> Double
-> -- empty list
-> mySum [] = 0
-> -- non-empty list
-> mySum (x:xs) = x + sum xs
+~~~haskell
+mySum :: [Double] -> Double
+-- empty list
+mySum [] = 0
+-- non-empty list
+mySum (x:xs) = x + sum xs
+~~~
 
 Something slightly different:
 
-> myLength [] = 0
-> myLength (x:xs) = 1 + myLength xs
+~~~haskell
+myLength [] = 0
+myLength (x:xs) = 1 + myLength xs
+~~~
 
 type of myLength?
 
@@ -170,8 +182,10 @@ instead of
 The mighty dot
 ==============
 
-> (.) :: (b -> c) -> (a -> b) -> (a -> c)
-> (.) f g = \x -> f (g x)
+~~~haskell
+(.) :: (b -> c) -> (a -> b) -> (a -> c)
+(.) f g = \x -> f (g x)
+~~~
 
 
 Some one liners
@@ -179,11 +193,15 @@ Some one liners
 
 - Fibonacci numbers
 
-> fibs = 0:1:zipWith (+) fibs (tail fibs)
+~~~haskell
+fibs = 0:1:zipWith (+) fibs (tail fibs)
+~~~
 
 - Powers of two
 
-> powers = iterate (*2) 1
+~~~haskell
+powers = iterate (*2) 1
+~~~
 
 Last slide
 ==========
