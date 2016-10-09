@@ -94,12 +94,15 @@ fst (a, b) = a
 snd (a, b) = b
 ~~~
 
-As a matter of fact, fst and snd are built-ins.
+Here, __a__ and __b__ are _variables_
 
 ~~~haskell
 fst :: (a, b) -> a
 snd :: (a, b) -> b
 ~~~
+
+Here, __a__ and __b__ are _type variables_, can be _any_ types,
+including functions
 
 Type signature can be really instructive
 
