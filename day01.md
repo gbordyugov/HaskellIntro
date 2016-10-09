@@ -9,7 +9,15 @@ Language
 --------
 - Pure: there is no state
 - Strongly typed: each value has a type
-- Algebraic types
+- Algebraic (container) types:
+
+~~~haskell
+data Weekday = Sunday | Monday | Tuesday
+             | Wednesday | Thursday | Friday
+             | Saturday
+data Maybe a = Nothing | Just a
+~~~
+
 - Lazily evaluated (infinitely large data structures)
 - Compiles to native code plus interpreter ala ipython
 - Consequence of purity: easily parallelizeable
@@ -35,15 +43,15 @@ My personal impression
 - Mathematical (category theory)
 - If your program compiles, it most probably works as expected
 
-Today: Functions and Types
-==========================
+Today: Functions and (some) Types
+=================================
 
 Functions
 =========
 
 ~~~haskell
-square :: Double -> Double
-square x = x*x
+f :: Double -> Double
+f x = x*x
 
 plus :: Double -> Double -> Double
 plus x y = x+y
@@ -52,7 +60,7 @@ fib :: Integer -> Integer
 -- pattern matching
 fib 0 = 0
 fib 1 = 1
-fib n = fib (n-1) + fib (n-1)
+fib n = fib (n-1) + fib (n-2)
 ~~~
 
 Partial application
@@ -84,6 +92,25 @@ add :: Double -> (Double -> Double)
 
 mapping a double to a function of type Double -> Double
 
+Tuples
+=======
+~~~haskell
+myTuple = (5, "AmbroSys")
+
+-- pattern matching again
+fst (a, b) = a
+snd (a, b) = b
+~~~
+
+As a matter of fact, fst and snd are built-ins.
+
+~~~haskell
+fst :: (a, b) -> a
+snd :: (a, b) -> b
+~~~
+
+Type signature can be really instructive
+
 Lists
 =====
 
@@ -100,24 +127,48 @@ take 3 numbers -- => [1, 2]
 
 take 5 [1..] -- => [1, 2, 3, 4, 5]
 
+map :: (a -> b) -> [a] -> [b]
+
 map (1+) numbers -- => [2, 3, 4, 5]
 map (*2) numbers -- => [2, 4, 6, 8]
-
-zipWith (*) numbers (map (+1) numbers) -- => ?
 ~~~
 
-Lists of Chars
-==============
+Infinite Fibonacci Sequence
+===========================
+
+We use
+
+~~~haskell
+zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+~~~
+
+such as in
+
+~~~haskell
+zipWith (+) [1, 2, 3] [3, 2, 1]
+-- => [5, 5, 5]
+~~~
+
+to write
+
+~~~haskell
+fibs = 0:1:(zipWith (+) fibs (tail fibs))
+~~~
+
+mind blowing, eh?
+
+Strings = Lists of Chars
+========================
 
 ~~~haskell
 string = "Old McDonald had a farm"
 ~~~
 
 ~~~haskell
-words string -- => ["Old", "McDonald", "had",
-             --     "a", "farm"]
 head string -- => 'O'
 take 3 string -- => "Old"
+words string -- => ["Old", "McDonald", "had",
+             --     "a", "farm"]
 
 "Ambro" ++ "Sys" -- => "AmbroSys"
 
@@ -155,8 +206,8 @@ myLength :: [a] -> Integer
 
 Polymorphism!
 
-Project: Difference lists
-================
+Project: Difference Lists
+=========================
 
 Problem: for single-linked lists, concatenation can be expensive if the
 first list happens to be long
@@ -178,6 +229,94 @@ instead of
 ~~~haskell
 ("Old" ++ "McDonald had a") ++ "farm"
 ~~~
+
+Difference Lists
+================
+
+From Wiki: A difference list represents lists as a function __dlist__,
+which when given a list __x__, returns the list that __dlist__
+represents, _prepended_ to __x__. 
+
+~~~haskell
+dlist  y   = \x -> y ++ x
+concat a b = \x -> a(b(x))
+showdl x   = x ""
+
+(j, h) = (dlist "jacke", dlist "hose")
+jh     = concat j h
+jhjh   = concat jh jh
+showdl jhjh -- => "jackehosejackehose"
+
+(f . g . h) x
+~~~
+associates always to the right!
+
+Types
+=====
+
+Simple types
+
+~~~haskell
+data Nucleotide = A | C | G | T
+
+complement A = T
+complement C = G
+complement G = C
+complement T = A
+
+map complement [A, A, C, G, T, T]
+~~~
+
+Container Types: List
+=====================
+
+~~~haskell
+data List a = Nil
+            | Cons a (List a)
+~~~
+
+_type variable_ __a__ parameterizes our list
+
+~~~haskell
+myLength :: List a -> Integer
+myLength Nil = 0
+myLength (Cons x xs) = 1 + myLength xs
+
+myMap :: (a -> b) -> List a -> List b
+myMap f Nil = Nil
+myMap f (Cons x xs) = Cons (f x) (myMap xs)
+~~~
+
+as a matter of fact:
+
+~~~haskell
+data [a] = [] | a:[a]
+~~~
+
+Container Types: Binary Tree
+============================
+
+~~~haskell
+data Tree a = Leaf a
+            | Node a (Tree a) (Tree a)
+
+depth :: Tree a -> Int
+depth (Leaf x) = 1
+depth (Node x left right) = 1 + d
+  where d = max (depth left) (depth right)
+
+treeMap :: (a -> b) -> Tree a -> Tree b
+treeMap f (Leaf x) = Leaf (f x)
+treeMap f (Node x left right) =
+  Node (f x) (treeMap f left) (treeMap f right)
+
+~~~
+
+
+The mighty dot
+==============
+
+Write the type signature and definition of the function composition (.)
 
 The mighty dot
 ==============
@@ -205,3 +344,5 @@ powers = iterate (*2) 1
 
 Last slide
 ==========
+
+
