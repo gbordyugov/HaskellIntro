@@ -9,7 +9,7 @@ Language
 --------
 - Pure: there is no state
 - Strongly typed: each value has a type
-- Algebraic (container) types:
+- Algebraic (container) types
 - Lazily evaluated (infinitely large data structures)
 - Compiles to native code plus interpreter ala ipython
 - Consequence of purity: easily parallelizeable
