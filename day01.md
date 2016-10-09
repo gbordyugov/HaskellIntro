@@ -216,7 +216,7 @@ first list happens to be long
 "Old McDonald had a" ++ "farm"
 ~~~
 
-When concatenating a large number of lists, how to ensure the right
+When concatenating a large number of lists, how to ensure right
 associativity?
 
 In other words, we want to ensure
