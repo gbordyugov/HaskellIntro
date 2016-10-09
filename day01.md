@@ -354,7 +354,7 @@ data List a = Nil
             | Cons a (List a)
 ~~~
 
-_type variable_ __a__ parameterizes our list ( reminder! )
+__A recursive type!__
 
 ~~~haskell
 myLength :: List a -> Integer
