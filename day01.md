@@ -12,7 +12,7 @@ Language
 - Algebraic (container) types
 - Lazily evaluated (infinitely large data structures)
 - Compiles to native code plus interpreter ala ipython
-- Consequence of purity: easily parallelizeable
+- Consequence of purity: code easy to parallelize
 
 Haskell language
 ================
