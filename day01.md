@@ -1,6 +1,6 @@
 % Intro to Haskell
 % G Bordyugov
-% given at AmbroSys in Oct 2016
+% Oct 2016
 
 Haskell language
 ================
