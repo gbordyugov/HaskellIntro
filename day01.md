@@ -182,12 +182,18 @@ Project with Strings
 Using
 
 ~~~haskell
-reverse :: [a] -> [a]
+reverse :: String -> String
 words :: String -> [String]
 unwords :: [String] -> String
 ~~~
 
 write a function that will reverse all words in a string.
+
+I.e.
+
+~~~haskell
+reverseWords "bla bli blu" -- => "abl ibl ubl"
+~~~
 
 Project with Strings
 ====================
@@ -195,7 +201,7 @@ Project with Strings
 Using
 
 ~~~haskell
-reverse :: [a] -> [a]
+reverse :: String -> String
 words :: String -> [String]
 unwords :: [String] -> String
 ~~~
