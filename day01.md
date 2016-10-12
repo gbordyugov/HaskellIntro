@@ -175,6 +175,40 @@ map toUpper string -- => "OLD MCDONALD
 numOfWords = length . words -- point-free notation
 ~~~
 
+
+Project with Strings
+====================
+
+Using
+
+~~~haskell
+reverse :: [a] -> [a]
+words :: String -> [String]
+unwords :: [String] -> String
+~~~
+
+write a function that will reverse all words in a string.
+
+Project with Strings
+====================
+
+Using
+
+~~~haskell
+reverse :: [a] -> [a]
+words :: String -> [String]
+unwords :: [String] -> String
+~~~
+
+write a function that will reverse all words in a string.
+
+Solution:
+
+~~~haskel
+reverseWords = unwords . (map reverse) . words
+~~~
+
+
 Recursion over Lists
 ====================
 
