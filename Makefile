@@ -1,5 +1,7 @@
 all: day01.html
 
+day01.html: day01.md style.css Makefile
+
 .SUFFIXES: .md .html
 
 .md.html:
