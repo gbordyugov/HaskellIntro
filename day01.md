@@ -118,7 +118,7 @@ numbers = [1, 2, 3, 4]
 ~~~haskell
 head numbers -- => 1
 tail numbers -- => [2, 3, 4]
-take 3 numbers -- => [1, 2]
+take 3 numbers -- => [1, 2, 3]
 
 take 5 [1..] -- => [1, 2, 3, 4, 5]
 
@@ -141,7 +141,7 @@ such as in
 
 ~~~haskell
 zipWith (+) [1, 2, 3] [3, 2, 1]
--- => [5, 5, 5]
+-- => [4, 4, 4]
 ~~~
 
 to write
@@ -223,7 +223,7 @@ mySum :: [Double] -> Double
 -- empty list
 mySum [] = 0
 -- non-empty list
-mySum (x:xs) = x + sum xs
+mySum (x:xs) = x + mySum xs
 ~~~
 
 Something slightly different:
@@ -275,7 +275,8 @@ represents, _prepended_ to __x__.
 ~~~haskell
 dlist  y   = \x -> y ++ x
 concat a b = \x -> a (b x)
-showdl x   = x ""
+concat a b = \x -> (a . b) x
+showdl x   = x []
 
 (j, h) = (dlist "jacke", dlist "hose")
 jh     = concat j h
