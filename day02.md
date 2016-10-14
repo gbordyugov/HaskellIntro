@@ -38,14 +38,11 @@ unwords :: [String] -> String
 ~~~
 
 write a function that will reverse letters in all words in a string.
+Solution:
 
 ~~~haskell
 reverseWords :: String -> String
-
 reverseWords = unwords . (map reverse) . words
-words :: String -> [String]
-map reverse :: [String] -> [String]
-unwords :: [String] -> String
 ~~~
 
 
@@ -251,6 +248,46 @@ treeMap f (Node x left right) =
 
 ~~~
 
+
+Records Style
+=============
+
+The type declaration
+
+~~~haskell
+data User = User { userName :: String
+                 , userFriends :: [User]
+                 }
+~~~
+
+__automatically__ introduces all accessors:
+
+~~~haskell
+userName :: User -> String
+userName (User x _) = x
+
+userFriends :: User -> [User]
+userFriends (User _ x) = x
+~~~
+
+might be an advantage as well as disadvantage
+
+Records Style
+=============
+
+New declaration for `Complex` might be
+
+~~~haskell
+data Complex = Cartesian { re :: Double 
+                         , im :: Double}
+             | Polar { abs :: Double
+                     , arg :: Double}
+
+-- re, im, abs, and arg are auto-generated
+-- by compiler, but
+abs $ Cartesian 1.0 2.0
+-- would cause an error
+~~~
 
 The mighty dot
 ==============
