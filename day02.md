@@ -118,7 +118,7 @@ for fun and profit:
 
 
 ~~~haskell
-z = (z1 <+> z2) </> (z1 <-> z2) <*> z1
+z = (z1 <+> z2) </> (z1 <-> z2)
 zs = zipWith (<+>) xs ys
   where
   xs = map Cartesian [1, 2, 3], [4,  5, 6]
