@@ -190,7 +190,7 @@ Recursive Types
 
 ~~~haskell
 data User = User String -- name
-                 [User] -- friends
+                 [User] -- list of friends
 
 makeUser :: String -> User
 makeUser name = User name [] -- no friends
