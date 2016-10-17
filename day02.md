@@ -249,6 +249,24 @@ treeMap f (Node x left right) =
 ~~~
 
 
+A Custom DSL for Arithmetic Expressions
+=======================================
+
+~~~haskell
+data Expr = Constant Int
+          | Negate Expr
+          | Plus Expr Expr
+          | Minus Expr Expr
+
+eval :: Expr -> Int
+eval (Constant a) = a
+eval (Negate e) = -e
+eval (Plus x y) = (eval x) + (eval y)
+eval (Minus x y) = (eval x) - (eval y)
+
+exp = Negate (Plus 1 (Minus 3 2))
+~~~
+
 Records Style
 =============
 
