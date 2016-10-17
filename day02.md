@@ -253,18 +253,30 @@ A Custom DSL for Arithmetic Expressions
 =======================================
 
 ~~~haskell
-data Expr = Constant Int
+data Expr = Constant Double
           | Negate Expr
           | Plus Expr Expr
           | Minus Expr Expr
 
-eval :: Expr -> Int
+eval :: Expr -> Double
 eval (Constant a) = a
 eval (Negate e) = -e
 eval (Plus x y) = (eval x) + (eval y)
 eval (Minus x y) = (eval x) - (eval y)
 
 exp = Negate (Plus 1 (Minus 3 2))
+~~~
+
+A Custom DSL for Arithmetic Expressions
+=======================================
+
+~~~haskell
+data Expr = Constant Double
+          | UnitaryOp Expr 
+          | BinaryOp Expr Expr
+
+data BinaryOp  = Add | Sub | Mul | Div | ...
+data UnitaryOp = Negate | Abs | Sin | Cos | ...
 ~~~
 
 Records Style
