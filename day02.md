@@ -174,7 +174,7 @@ Ta-da!
 Home Exercise
 =============
 
-Understand and derive type of
+Understand and derive the type of
 
 ~~~haskell
 map map :: [a -> b] -> [[a] -> [b]]
