@@ -27,7 +27,7 @@ write a function that will reverse letters in all words in a string.
 I.e.
 
 ~~~haskell
-reverseWords "bla bli blu" -- => "abl ibl ubl"
+reverseWords "bla bli blu" -- => "alb ilb ulb"
 ~~~
 
 Check the type of the `reverseWords`.
