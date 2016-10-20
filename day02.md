@@ -153,7 +153,7 @@ from those types, it follows:
 a = u -> v
 b = [u] -> [v]
 b = p -> q
-c = [p] - [q]
+c = [p] -> [q]
 ~~~
 
 From here, it follows that `p = [u], q = [v]`
