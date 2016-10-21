@@ -354,7 +354,7 @@ myLength (Cons x xs) = 1 + myLength xs
 
 myMap :: (a -> b) -> List a -> List b
 myMap f Nil = Nil
-myMap f (Cons x xs) = Cons (f x) (myMap xs)
+myMap f (Cons x xs) = Cons (f x) (myMap f xs)
 ~~~
 
 as a matter of fact:
@@ -398,7 +398,8 @@ eval (Negate e) = -e
 eval (Plus x y) = (eval x) + (eval y)
 eval (Minus x y) = (eval x) - (eval y)
 
-exp = Negate (Plus 1 (Minus 3 2))
+exp = Negate (Plus (Constant 1)
+              (Minus (Constant 3)(Constant 2)))
 ~~~
 
 A Custom DSL for Arithmetic Expressions
