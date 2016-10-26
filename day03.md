@@ -1,4 +1,4 @@
-% Intro to Haskell, day 2
+% Intro to Haskell, day 3
 % G Bordyugov
 % Oct 2016
 
@@ -8,6 +8,10 @@ Today
 
 0. Home Exercise
 1. Algebraic Data Types
+
+~~~{.haskell}
+import Prelude hiding (abs, div)
+~~~
 
 Home Exercise
 =============
@@ -33,7 +37,8 @@ complement T = A
 
 myNuc = A
 myAnotherNuc = C
-comp = map complement [A, A, C, G, T, T]
+seqA = [A, A, C, G, T, T]
+seqB = map complement seqA
 ~~~
 
 Types contd: Sum types
@@ -69,13 +74,13 @@ data Complex = Cartesian Double Double
              | Polar     Double Double
 ~~~
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 add a b = Cartesian (re a + re b) (im a + im b)
 sub a b = Cartesian (re a - re b) (im a - im b)
 mul a b =
-  Polar (abs a)*(abs b) (arg a + arg b)
+  Polar ((abs a)*(abs b)) (arg a + arg b)
 div a b =
-  Polar (abs a)/(abs b) (arg a - arg b)
+  Polar ((abs a)/(abs b)) (arg a - arg b)
 ~~~
 
 Syntactic Sugar
@@ -83,7 +88,7 @@ Syntactic Sugar
 Haskell supports user-defined _infix_ functions, for example, we can
 define
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 (<+>) = add
 (<->) = sub
 (<*>) = mul
@@ -93,38 +98,39 @@ define
 for fun and profit:
 
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 z = (z1 <+> z2) </> (z1 <-> z2)
 zs = zipWith (<+>) xs ys
   where
-  xs = map Cartesian [1, 2, 3] [4,  5, 6]
-  ys = map Polar     [1, 1, 2] [0, pi, pi]
+  xs = zipWith Cartesian [1, 2, 3] [4,  5, 6]
+  ys = zipWith Polar     [1, 1, 2] [0, pi, pi]
 ~~~
 
 Syntactic Sugar
 ===============
 In general, special symbol functions are __infix__ by default:
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 a = 5 + 3
 ~~~
 
 but can be used in __prefix__ notation:
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 b = (+) 5 3
 ~~~
 
 Alpha-numerical functions are by default __prefix__:
 
-~~~{.haskell .ignore}
-z1 = plus x1 y1
+~~~{.haskell}
+plus = (+)
+c = plus 2 3
 ~~~
 
 but can be used in __infix__ notation with backquotes:
 
-~~~{.haskell .ignore}
-z1 = x1 `plus` y1
+~~~{.haskell}
+d = 2 `plus` 3
 ~~~
 
 
@@ -148,22 +154,24 @@ data Complex = Cartesian Double Double
              | Polar     Double Double
 ~~~
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 re (Cartesian x y) = x
-im (Cartesian x y) = y
 re (Polar r theta) = r * cos theta
+
 im (Polar r theta) = r * sin theta
+im (Cartesian x y) = y
 
 abs (Cartesian x y) = sqrt (x*x + y*y)
-arg (Cartesian x y) = atan2 y x
 abs (Polar r theta) = r
+
+arg (Cartesian x y) = atan2 y x
 arg (Polar r theta) = theta
 ~~~
 
 Recursive Types
 ===============
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 data User = User String -- name
                  [User] -- list of friends
 
@@ -184,14 +192,14 @@ thomas = makeUser "Thomas" <-- markus
 Container Types: List
 =====================
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 data List a = Nil
             | Cons a (List a)
 ~~~
 
 Recursion on list:
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 myLength :: List a -> Integer
 myLength Nil = 0
 myLength (Cons x xs) = 1 + myLength xs
@@ -210,17 +218,17 @@ data [a] = [] | a:[a]
 Container Types: Binary Tree
 ============================
 
-~~~{.haskell .ignore}
-data Tree a = Leaf a
+~~~{.haskell}
+data Tree a = Leaf
             | Node a (Tree a) (Tree a)
 
 depth :: Tree a -> Int
-depth (Leaf x) = 1
+depth Leaf = 0
 depth (Node x left right) = 1 + d
   where d = max (depth left) (depth right)
 
 treeMap :: (a -> b) -> Tree a -> Tree b
-treeMap f (Leaf x) = Leaf (f x)
+treeMap f Leaf = Leaf
 treeMap f (Node x left right) =
   Node (f x) (treeMap f left) (treeMap f right)
 ~~~
@@ -229,7 +237,7 @@ treeMap f (Node x left right) =
 A Custom DSL for Arithmetic Expressions
 =======================================
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 data Expr = Constant Double
           | Negate Expr
           | Plus Expr Expr
@@ -237,7 +245,7 @@ data Expr = Constant Double
 
 eval :: Expr -> Double
 eval (Constant a) = a
-eval (Negate e) = -e
+eval (Negate e) = - eval e
 eval (Plus x y) = (eval x) + (eval y)
 eval (Minus x y) = (eval x) - (eval y)
 
@@ -248,13 +256,13 @@ exp = Negate (Plus (Constant 1)
 A Custom DSL for Arithmetic Expressions
 =======================================
 
-~~~{.haskell .ignore}
-data Expr = Constant Double
-          | Unitary UnitaryOp Expr
-          | Binary BinaryOp Expr Expr
+~~~{.haskell}
+data Ausdruck = Konstant Double
+              | Unitary UnitaryOp Expr
+              | Binary BinaryOp Expr Expr
 
 data BinaryOp  = Add | Sub | Mul | Div
-data UnitaryOp = Negate | Abs | Sin | Cos
+data UnitaryOp = Neg | Abs | Sin | Cos
 ~~~
 
 Records Style
@@ -262,7 +270,7 @@ Records Style
 
 The type declaration
 
-~~~{.haskell .ignore}
+~~~{.haskell}
 data RUser = RUser { userName :: String
                    , userFriends :: [User]
                    }
@@ -285,14 +293,17 @@ Records Style
 
 New declaration for `Complex` might be
 
-~~~{.haskell .ignore}
-data Complex = Cartesian { re :: Double 
-                         , im :: Double}
-             | Polar { abs :: Double
-                     , arg :: Double}
+~~~{.haskell}
+data Komplex = Kartesian { reP :: Double 
+                         , imP :: Double}
+             | Polr { rad :: Double
+                    , ang :: Double}
+~~~
 
--- re, im, abs, and arg are auto-generated
--- by compiler, but
+re, im, abs, and arg are auto-generated
+by compiler, but
+
+~~~{.haskell .ignore}
 abs $ Cartesian 1.0 2.0
 -- would cause an error
 ~~~

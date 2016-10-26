@@ -38,6 +38,10 @@ My personal impression
 Today: Functions and (some) Types
 =================================
 
+~~~{.haskell}
+import Prelude hiding (concat)
+~~~
+
 Functions
 =========
 
@@ -66,19 +70,19 @@ add x y = x+y
 addThree = add 3
 ~~~
 
-~~~haskell
+~~~{.haskell .ignore}
 addThree 5 -- => 8
 ~~~
 
 Explanation:
 
-~~~haskell
+~~~{.haskell .ignore}
 add :: Double -> Double -> Double
 ~~~
 
 is equivalent to
 
-~~~haskell
+~~~{.haskell .ignore}
 add :: Double -> (Double -> Double)
 ~~~
 
@@ -115,7 +119,7 @@ numbers = [1, 2, 3, 4]
 -- equivalent to 1:2:[3, 4], etc
 ~~~
 
-~~~haskell
+~~~{.haskell .ignore}
 head numbers -- => 1
 tail numbers -- => [2, 3, 4]
 take 3 numbers -- => [1, 2, 3]
@@ -133,13 +137,13 @@ Infinite Fibonacci Sequence
 
 We use
 
-~~~haskell
+~~~{.haskell .ignore}
 zipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
 ~~~
 
 such as in
 
-~~~haskell
+~~~{.haskell .ignore}
 zipWith (+) [1, 2, 3] [3, 2, 1]
 -- => [4, 4, 4]
 ~~~
@@ -159,7 +163,7 @@ Strings = Lists of Chars
 string = "Old McDonald had a farm"
 ~~~
 
-~~~haskell
+~~~{.haskell .ignore}
 head string -- => 'O'
 take 3 string -- => "Old"
 words string -- => ["Old", "McDonald", "had",
@@ -208,7 +212,7 @@ Project: Difference Lists
 Problem: for single-linked lists, concatenation can be expensive if the
 first list happens to be long
 
-~~~haskell
+~~~{.haskell .ignore}
 "Old McDonald had a" ++ "farm"
 ~~~
 
@@ -217,12 +221,12 @@ associativity?
 
 In other words, we want to ensure
 
-~~~haskell
+~~~{.haskell .ignore}
 "Old" ++ ("McDonald had a" ++ "farm")
 ~~~
 instead of
 
-~~~haskell
+~~~{.haskell .ignore}
 ("Old" ++ "McDonald had a") ++ "farm"
 ~~~
 
@@ -236,14 +240,18 @@ represents, _prepended_ to __x__.
 ~~~haskell
 dlist  y   = \x -> y ++ x
 concat a b = \x -> a (b x)
-concat a b = \x -> (a . b) x
+-- concat a b = \x -> (a . b) x
 showdl x   = x []
 
 (j, h) = (dlist "jacke", dlist "hose")
 jh     = concat j h
 jhjh   = concat jh jh
+~~~
+
+~~~{.haskell .ignore}
 showdl jhjh -- => "jackehosejackehose"
 
 (f . g . h) x
 ~~~
+
 associates always to the right!

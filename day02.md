@@ -10,12 +10,16 @@ Today
 1. Exercises with lists and maps
 2. Algebraic data types
 
+~~~haskell
+import Prelude hiding ((.))
+~~~
+
 Refresher: Strings
 ====================
 
 Using
 
-~~~haskell
+~~~{.haskell .ignore}
 map :: (a -> b) -> [a] -> [b]
 reverse :: String -> String
 words :: String -> [String]
@@ -26,7 +30,7 @@ write a function that will reverse letters in all words in a string.
 
 I.e.
 
-~~~haskell
+~~~{.haskell .ignore}
 reverseWords "bla bli blu" -- => "alb ilb ulb"
 ~~~
 
@@ -37,7 +41,7 @@ Refresher: Strings
 
 Using
 
-~~~haskell
+~~~{.haskell .ignore}
 map :: (a -> b) -> [a] -> [b]
 reverse :: String -> String
 words :: String -> [String]
@@ -75,11 +79,14 @@ The mighty dot
 
 Prefix and infix notations can be used interchangeably:
 
+either
 ~~~haskell
--- either
 f . g = \x -> f (g x)
+~~~
 
--- or
+or
+
+~~~{.haskell .ignore}
 (.) f g = \x -> f (g x)
 ~~~
 
@@ -88,7 +95,7 @@ f . g = \x -> f (g x)
 Higher-order mapping
 ====================
 
-~~~haskell
+~~~{.haskell .ignore}
 map :: (a -> b) -> [a] -> [b]
 
 map (+1) [1, 2, 3] -- => [2, 3, 4]
@@ -100,7 +107,7 @@ map (+1) [[1, 2], [3, 4], [5,6]]
 Solution:
 
 
-~~~haskell
+~~~{.haskell .ignore}
 (map . map) (+1) [[1, 2], [3, 4], [5,6]]
 ~~~
 
@@ -115,7 +122,7 @@ Untangling `(map . map)`
 
 We have for `(map . map)`
 
-~~~haskell
+~~~{.haskell .ignore}
 (.) :: (b -> c) -> (a -> b) -> (a -> c)
 
 map :: (u -> v) -> ([u] -> [v])
@@ -132,7 +139,7 @@ Untangling `(map . map)`
 
 We have for `(map . map)`
 
-~~~haskell
+~~~{.haskell .ignore}
 (.) :: (b -> c) -> (a -> b) -> (a -> c)
 
 map :: (u -> v) -> ([u] -> [v])
@@ -176,6 +183,6 @@ Home Exercise
 
 Understand and derive the type of
 
-~~~haskell
+~~~{.haskell .ignore}
 map map :: [a -> b] -> [[a] -> [b]]
 ~~~
