@@ -184,6 +184,7 @@ thomas = makeUser "Thomas" <-- markus
 Container Types: List
 =====================
 
+~~~{.haskell .ignore}
 data List a = Nil
             | Cons a (List a)
 ~~~
