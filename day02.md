@@ -407,8 +407,8 @@ A Custom DSL for Arithmetic Expressions
 
 ~~~haskell
 data Expr = Constant Double
-          | Unitary (UnitaryOp Expr)
-          | Binary (BinaryOp Expr Expr)
+          | Unitary UnitaryOp Expr
+          | Binary BinaryOp Expr Expr
 
 data BinaryOp  = Add | Sub | Mul | Div | ...
 data UnitaryOp = Negate | Abs | Sin | Cos | ...
