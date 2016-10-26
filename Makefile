@@ -1,7 +1,8 @@
-all: day01.html day02.html
+all: day01.html day02.html day03.html
 
 day01.html: day01.md style.css Makefile
 day02.html: day02.md style.css Makefile
+day03.html: day03.md style.css Makefile
 
 .SUFFIXES: .md .html
 
