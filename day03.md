@@ -304,6 +304,6 @@ re, im, abs, and arg are auto-generated
 by compiler, but
 
 ~~~{.haskell .ignore}
-abs $ Cartesian 1.0 2.0
+rad $ Kartesian 1.0 2.0
 -- would cause an error
 ~~~
