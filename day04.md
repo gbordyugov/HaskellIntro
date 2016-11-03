@@ -27,7 +27,7 @@ mySum (x:xs) = x + mySum xs
 
 myProd :: [Int] -> Int
 myProd [] = 1
-myProd (x:xs) = x * mySum xs
+myProd (x:xs) = x * myProd xs
 ~~~
 
 Recursion on lists
@@ -39,7 +39,7 @@ myAnd (x:xs) = x && myAnd xs
 
 myOr :: [Bool] -> Bool
 myOr [] = False
-myOr (x:xs) = x || myAnd xs
+myOr (x:xs) = x || myOr xs
 
 myMap :: (a -> b) -> [a] -> [b]
 myMap f [] = []
@@ -112,7 +112,7 @@ foldl f z (x:xs) = foldl f (f z x) xs
 
 Exercise: step through `foldl (+) 0 [1, 2, 3]`
 
-Home exercise: express `foldl` by `foldl` (the other way around is not
+Home exercise: express `foldl` by `foldr` (the other way around is not
 possible).
 
 Typeclasses
