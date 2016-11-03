@@ -62,7 +62,7 @@ foldr f z (x:xs) = f x (foldr f z xs)
 <img align="center" src="foldr.png", style="width: 420px;"/>
 </div>
 
-What do we win by `foldr`?
+What do we win by using `foldr`?
 ==========================
 ... avoiding explicit recursion!
 
