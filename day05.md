@@ -54,3 +54,74 @@ foldl (+) (((0 + 1) + 2) + 3) [4, 5] =>
 ... =>
 ((((0 + 1) + 2) + 3) + 4) + 5
 ~~~
+
+
+Monoids
+=======
+A typeclass for _composable_ things
+
+~~~{.haskell .ignore}
+class Monoid m where
+  mempty :: m
+  mappend :: m -> m -> m
+  mconcat = foldr mappend mempty
+
+x <> y = mappend x y
+~~~
+
+__Monoid Laws__:
+
+~~~{.haskell .ignore}
+x <> mempty = x
+mempty <> x = x
+(x <> y) <> z = x <> (y <> z)
+~~~
+
+Monoid trivial examples
+=======================
+
+~~~{.haskell .ignore}
+instance Monoid Int where
+  mempty = 0
+  mappend = (+)
+
+instance Monoid Int where
+  mempty = 1
+  mappend = (*)
+~~~
+
+Monoid: log summaries
+=====================
+~~~{.haskell .ignore}
+data LogEntry = { user :: User
+                , duration :: Double
+                , spent :: Double}
+data LogSummary = LS { users :: [User],
+                     , moneySpent :: Double}
+
+instance Monoid LogSummary where
+  mempty = LS [] 0.0
+  (LS us ms) <> (LS vs ls) = LS us<+>vs ls+ms
+    where a <+> b = toList $ fromList a ++ b
+
+report :: [LogEntry] -> LogSummary
+report entries = mconcat
+                 $ map entryToSummary entries
+~~~
+
+Monoid: Distributions
+=====================
+~~~{.haskell .ignore}
+data Gaussian = Gaussian { n :: Int
+                         , mean :: Double
+                         , var  :: Double}
+
+instance Monoid Gaussian where
+  mempty = Gaussian 1 0.0 0.0
+  (Gaussian n1 m1 v1) <> (Gaussian n2 m2 v2) =
+    Gaussian n3 m3 v3 where
+      n3 = n1 + n2
+      m3 = (n1*m1 + n2*m2)/n3
+      v3 = v2 + n1*v1*v1 + v2 + n2*v2*v2
+           - n3*m3*m3
+~~~
