@@ -7,7 +7,7 @@ Today
 =====
 
 0. Folds, folds, folds
-1. Type classes
+1. Monoids
 
 ~~~{.haskell}
 import Prelude hiding (foldr, foldl)
