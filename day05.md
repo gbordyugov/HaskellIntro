@@ -96,17 +96,17 @@ Monoid: log summaries
 data LogEntry = { user :: User
                 , duration :: Double
                 , spent :: Double}
-data LogSummary = LS { users :: [User],
+data LogSummary = LS { users :: Set User,
                      , moneySpent :: Double}
 
 instance Monoid LogSummary where
   mempty = LS [] 0.0
-  (LS us ms) <> (LS vs ls) = LS us<+>vs ls+ms
-    where a <+> b = toList $ fromList a ++ b
+  (LS us ms) <> (LS vs ls) =
+    LS (us `union` vs) ls+ms
 
 report :: [LogEntry] -> LogSummary
-report entries = mconcat
-                 $ map entryToSummary entries
+report entries =
+  mconcat $ map entryToSummary entries
 ~~~
 
 Monoid: Distributions
@@ -117,7 +117,7 @@ data Gaussian = Gaussian { n :: Int
                          , var  :: Double}
 
 instance Monoid Gaussian where
-  mempty = Gaussian 1 0.0 0.0
+  mempty = Gaussian 0 0.3 0.4
   (Gaussian n1 m1 v1) <> (Gaussian n2 m2 v2) =
     Gaussian n3 m3 v3 where
       n3 = n1 + n2
