@@ -116,6 +116,8 @@ class Monoid m where
 x <> y = mappend x y
 ~~~
 
+Monoid = semigroup + zero element
+
 __Monoid Laws__:
 
 ~~~{.haskell .ignore}
@@ -135,7 +137,36 @@ instance Monoid Int where
 instance Monoid Int where
   mempty = 1
   mappend = (*)
+
+instance Monoid [a] where
+  mempty = []
+  mappend = (++)
+
+instance Monoid (a -> a) where
+  mempty = id
+  mappend = (.)
 ~~~
+
+Monoids: less trivial examples
+==============================
+~~~{.haskell .ignore}
+data Max a = Max { getMax :: a }
+
+instance (Ord a, Bounded a) => Monoid (Max a)
+  where
+    mempty = Max minBound
+    mappend = max
+
+data Uhrzeit = Uhrzeit { stunde :: Int
+                       , minute :: Int
+                       , sekunde :: Int
+                       }
+
+instance Monoid Uhrzeit where
+  mempty = Uhrzeit 0.0 0.0 0.0
+  mappend d1 d2 = ???
+~~~
+
 
 Monoid: log summaries
 =====================
@@ -144,12 +175,13 @@ data LogEntry = { user :: User
                 , duration :: Double
                 , spent :: Double}
 data LogSummary = LS { users :: Set User,
+                     , totalDuration :: Double
                      , moneySpent :: Double}
 
 instance Monoid LogSummary where
   mempty = LS [] 0.0
-  (LS us ms) <> (LS vs ls) =
-    LS (us `union` vs) ls+ms
+  (LS us ds ms) <> (LS vs es ls) =
+    LS (us `union` vs) ds+ es ls+ms
 
 report :: [LogEntry] -> LogSummary
 report entries =
