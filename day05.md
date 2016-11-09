@@ -55,6 +55,53 @@ foldl (+) (((0 + 1) + 2) + 3) [4, 5] =>
 ((((0 + 1) + 2) + 3) + 4) + 5
 ~~~
 
+`foldl` through `foldr`
+=======================
+~~~{.haskell .ignore}
+foldl :: (a -> b -> a) -> a -> [b] -> a
+foldl f z xs = smth z
+
+smth :: a -> a
+smth = foldr f' z' xs'
+~~~
+
+__Unknowns__: `f', z', xs'`
+
+Type signature of `foldr`:
+
+~~~{.haskell .ignore}
+foldr :: (u -> v -> v) -> v -> [u] -> v
+
+  =>     u = b   (xs' == xs)
+         v = a -> a
+~~~
+
+
+`foldl` through `foldr`
+=======================
+Above type inference results in
+
+~~~{.haskell .ignore}
+f' :: u -> v -> v = b -> (a -> a) -> (a -> a)
+~~~
+
+The only possible definition of `f'` is hence:
+
+~~~{.haskell .ignore}
+f' x g = \y -> g (f y x)
+  where x :: b
+        g :: a -> a
+        y :: a
+        f :: a -> b -> a -- argument of foldl
+~~~
+
+Summarizing:
+
+~~~{.haskell}
+foldl' f z xs = foldr f' id xs z where
+  f' x g = \y -> g (f y x)
+~~~
+
 
 Monoids
 =======
