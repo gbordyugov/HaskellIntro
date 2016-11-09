@@ -65,7 +65,7 @@ smth :: a -> a
 smth = foldr f' z' xs'
 ~~~
 
-__Unknowns__: `f', z', xs'`
+__Given__: `f, z, xs`, __unknown__: `f', z', xs'`
 
 Type signature of `foldr`:
 
