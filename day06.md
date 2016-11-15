@@ -61,7 +61,7 @@ instance Monad Maybe where
 
   (>>) :: Maybe a -> Maybe b -> Maybe b
   Nothing >> _ = Nothing
-  _ >> Nothing  = Nothing
+  _ >> Nothing = Nothing
   (Just x) >> (Just y) = Just y
 ~~~
 
