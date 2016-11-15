@@ -60,7 +60,7 @@ instance Monad Maybe where
   (Just x) >>= f = Just (f x)
 
   (>>) :: Maybe a -> Maybe b -> Maybe b
-  Nothiing >> _ = Nothing
+  Nothing >> _ = Nothing
   _ >> Nothing  = Nothing
   (Just x) >> (Just y) = Just y
 ~~~
