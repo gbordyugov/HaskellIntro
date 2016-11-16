@@ -193,7 +193,7 @@ IO as Applicative
 to get two lines:
 
 ~~~{.haskell .ignore}
-getToLines = (++) <$> getLine getLine
+getToLines = (++) <$> getLine <*> getLine
 ~~~
 
 Monad typeclass
