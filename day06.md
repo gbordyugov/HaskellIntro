@@ -7,7 +7,9 @@ Today
 =====
 
 0. Types recap
-1. Monads
+1. Functors
+2. Applicative Functors
+3. Monads
 
 Higher-kind types
 =================
@@ -29,6 +31,169 @@ Examples:
 type MaybeDouble = Maybe Double
 type TreeOfInts = Tree Int
 type ListOfListsOfChar = List (List Char)
+~~~
+
+Functor typeclass
+=================
+~~~{.haskell .ignore}
+class Functor f where
+  fmap :: (a -> b) -> f a - > f b
+
+(<$>) = fmap
+~~~
+
+`Maybe` as functor
+==================
+~~~{.haskell .ignore}
+instance Functor Maybe where
+  fmap f Nothing = Nothing
+  fmap f (Just x) = Just (f x)
+
+fmap (+3) (Just 5) => Just 8
+fmap (+3) Nothing => Nothing
+~~~
+
+`Tree` as functor
+=================
+~~~{.haskell .ignore}
+instance Functor Tree where
+  fmap f Leaf = Leaf
+  fmap f (Node a l r) =
+    Node (f a) (fmap f l) (fmap f r)
+~~~
+
+Function application as functor
+===============================
+For `f = (->) r`:
+
+~~~{.haskell .ignore}
+instance Functor ((->) r) where
+    fmap f g = (\x -> f (g x))
+~~~
+
+Type signature:
+
+
+~~~{.haskell .ignore}
+fmap :: (a -> b) ->   f a    ->   f b =
+        (a -> b) -> (->) r a -> (->) r b =
+        (a -> b) -> (r -> a) -> (r -> b)
+~~~
+
+or in other words
+
+~~~{.haskell .ignore}
+instance Functor ((->) r) where
+    fmap = (.)
+
+fmap (*3) (+100) 1 => 303
+~~~
+
+List as functor
+===============
+~~~{.haskell .ignore}
+instance Functor [a] where
+    fmap = map
+~~~
+
+IO actions as functor
+=====================
+~~~{.haskell .ignore}
+instance Functor IO where
+  fmap = ... -- see later
+
+getLine :: IO String
+getInt = fmap read getLine :: IO Int
+fmap (+3) getInt :: IO Int
+~~~
+
+
+Context is important
+====================
+~~~{.haskell .ignore}
+fmap (replicate 3) [1,2,3,4] =>
+[[1,1,1],[2,2,2],[3,3,3],[4,4,4]]
+
+fmap (replicate 3) (Just 4) =>
+Just [4,4,4]
+
+fmap (replicate 3) (Right "blah") =>
+Right ["blah","blah","blah"]
+
+fmap (replicate 3) Nothing =>
+Nothing
+
+fmap (replicate 3) (Tree 3 (Node 5 Leaf Leaf)) =>
+Tree [3,3,3] (Node [5,5,5] Leaf Leaf)
+~~~
+
+Applicative typeclass: motivation
+=================================
+~~~{.haskell .ignore}
+fmap (+) (Just 3) =>
+Just (+3) :: Maybe (Int -> Int)
+
+fmap (+) [1, 2, 3] =>
+[(+1), (+2), (+3)]:: [ Int -> Int ]
+~~~
+
+Would be nice if we could do
+
+~~~{.haskell .ignore}
+[(+1), (+2), (+3)] <*> [1, 2] =>
+[2,3,3,4,4,5]
+
+<*> :: f (a -> b) -> f a -> f b
+~~~
+
+but Functor cannot do it!
+
+Applicative typeclass
+=====================
+~~~{.haskell .ignore}
+class (Functor f) => Applicative f where
+    pure  :: a -> f a
+    (<*>) :: f (a -> b) -> f a -> f b
+~~~
+
+`Maybe` as Applicative
+======================
+~~~{.haskell .ignore}
+instance Applicative Maybe where
+    pure                  = Just
+    (Just f) <*> (Just x) = Just (f x)
+    _        <*> _        = Nothing
+
+Just (+5) <*> Just 3  => Just 8
+Just (+5) <*> Nothing => Nothing
+Nothing   <*> Just 3  => Nothing
+
+(+) <$> (Just 5) <*> Just 5 => Just 8
+~~~
+
+List as Applicative
+===================
+~~~{.haskell .ignore}
+instance Applicative [] where
+    pure x    = [x]
+    fs <*> xs = [f x | f <- fs, x <- xs]
+
+[(+1), (+2), (+3)] <*> [1, 2] =>
+[2,3,3,4,4,5]
+
+(+) <$> [1,2,3] <*> [1,2] =>
+[2,3,3,4,4,5]
+
+[(+1), (+2), (+3)] <*> (Just 3) =>
+ERROR
+~~~
+
+IO as Applicative
+==================
+to get two lines:
+
+~~~{.haskell .ignore}
+getToLines = (++) <$> getLine getLine
 ~~~
 
 Monad typeclass
