@@ -123,8 +123,8 @@ Right ["blah","blah","blah"]
 fmap (replicate 3) Nothing =>
 Nothing
 
-fmap (replicate 3) (Tree 3 (Node 5 Leaf Leaf)) =>
-Tree [3,3,3] (Node [5,5,5] Leaf Leaf)
+fmap (replicate 3) (Node 3 (Node 5 Leaf Leaf) Leaf) =>
+Node [3,3,3] (Node [5,5,5] Leaf Leaf) Leaf
 ~~~
 
 Applicative typeclass: motivation
@@ -168,7 +168,7 @@ Just (+5) <*> Just 3  => Just 8
 Just (+5) <*> Nothing => Nothing
 Nothing   <*> Just 3  => Nothing
 
-(+) <$> (Just 5) <*> Just 5 => Just 8
+(+) <$> (Just 5) <*> Just 3 => Just 8
 ~~~
 
 List as Applicative
@@ -266,7 +266,7 @@ with monads:
 asa x =
    arcsin x  >>=   sqrt    >>=  arccos
 
-::   m a     -> (a -> m a) -> (a -> m a)
+::   m a     -> (a -> m a) -> m a
 ~~~
 
 `Maybe` monad: why?
