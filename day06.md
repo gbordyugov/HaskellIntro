@@ -1,6 +1,6 @@
 % Intro to Haskell, day 6
 % G Bordyugov
-% Nov 2016
+% Dec 2016
 
 
 Today
@@ -220,9 +220,9 @@ For example, if `m = Maybe`:
 instance Monad Maybe where
   return x = Just x
 
-  a >>= f :: Maybe a -> (a -> Maybe b) -> Maybe B
+  (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe B
   Nothing  >>= _ = Nothing
-  (Just x) >>= f = Just (f x)
+  (Just x) >>= f = f x
 
   (>>) :: Maybe a -> Maybe b -> Maybe b
   Nothing >> _ = Nothing
@@ -265,8 +265,6 @@ with monads:
 ~~~{.haskell .ignore}
 asa x =
    arcsin x  >>=   sqrt    >>=  arccos
-
-::   m a     -> (a -> m a) -> m a
 ~~~
 
 `Maybe` monad: why?
